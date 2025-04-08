@@ -21,24 +21,24 @@ export const mockUsers: User[] = [
     id: "2",
     name: "Sara Mohammed",
     email: "sara@orderflow.com",
-    role: "admin",
-    sections: ["Electronics"],
+    role: "manager",
+    department: "Electronics",
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sara"
   },
   {
     id: "3",
     name: "Mohammed Hassan",
     email: "mohammed@orderflow.com",
-    role: "employee",
-    sections: ["Clothing"],
+    role: "team",
+    department: "Clothing",
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mohammed"
   },
   {
     id: "4",
     name: "Fatima Abdullah",
     email: "fatima@orderflow.com",
-    role: "employee",
-    sections: ["Electronics"],
+    role: "team",
+    department: "Electronics",
     avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Fatima"
   },
   {
@@ -56,8 +56,8 @@ export const mockStaffMembers: StaffMember[] = [
     id: "2",
     name: "Sara Mohammed",
     email: "sara@orderflow.com",
-    role: "admin",
-    sections: ["Electronics"],
+    role: "manager",
+    department: "Electronics",
     position: "Department Manager",
     shiftStart: "08:00",
     shiftEnd: "16:00",
@@ -66,21 +66,15 @@ export const mockStaffMembers: StaffMember[] = [
     taskCompletionStats: {
       averageTime: 45,
       tasksCompleted: 120,
-      lateCompletions: 5,
-      totalDelayMinutes: 240,
-      delaysByDay: {
-        "2024-04-01": 60,
-        "2024-04-02": 90,
-        "2024-04-03": 90
-      }
+      lateCompletions: 5
     }
   },
   {
     id: "3",
     name: "Mohammed Hassan",
     email: "mohammed@orderflow.com",
-    role: "employee",
-    sections: ["Clothing"],
+    role: "team",
+    department: "Clothing",
     position: "Senior Team Member",
     shiftStart: "09:00",
     shiftEnd: "17:00",
@@ -89,21 +83,15 @@ export const mockStaffMembers: StaffMember[] = [
     taskCompletionStats: {
       averageTime: 38,
       tasksCompleted: 150,
-      lateCompletions: 12,
-      totalDelayMinutes: 320,
-      delaysByDay: {
-        "2024-04-01": 80,
-        "2024-04-02": 120,
-        "2024-04-03": 120
-      }
+      lateCompletions: 12
     }
   },
   {
     id: "4",
     name: "Fatima Abdullah",
     email: "fatima@orderflow.com",
-    role: "employee",
-    sections: ["Electronics"],
+    role: "team",
+    department: "Electronics",
     position: "Team Member",
     shiftStart: "10:00",
     shiftEnd: "18:00",
@@ -112,21 +100,15 @@ export const mockStaffMembers: StaffMember[] = [
     taskCompletionStats: {
       averageTime: 42,
       tasksCompleted: 95,
-      lateCompletions: 8,
-      totalDelayMinutes: 180,
-      delaysByDay: {
-        "2024-04-01": 45,
-        "2024-04-02": 75,
-        "2024-04-03": 60
-      }
+      lateCompletions: 8
     }
   },
   {
     id: "6",
     name: "Khalid Saeed",
     email: "khalid@orderflow.com",
-    role: "employee",
-    sections: ["Home Goods"],
+    role: "team",
+    department: "Home Goods",
     position: "Team Member",
     shiftStart: "08:00",
     shiftEnd: "16:00",
@@ -135,13 +117,7 @@ export const mockStaffMembers: StaffMember[] = [
     taskCompletionStats: {
       averageTime: 50,
       tasksCompleted: 85,
-      lateCompletions: 10,
-      totalDelayMinutes: 240,
-      delaysByDay: {
-        "2024-04-01": 90,
-        "2024-04-02": 60,
-        "2024-04-03": 90
-      }
+      lateCompletions: 10
     }
   }
 ];

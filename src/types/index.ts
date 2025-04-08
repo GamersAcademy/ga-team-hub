@@ -1,21 +1,18 @@
 
 // User types
-export type UserRole = 'admin' | 'employee' | 'developer';
+export type UserRole = 'admin' | 'manager' | 'team' | 'developer';
 
 export interface User {
   id: string;
   name: string;
   email: string;
   role: UserRole;
-  sections?: string[];
+  department?: string;
   avatar?: string;
 }
 
 // Order types
 export type OrderStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled';
-
-// New tracking status type for the Track functionality
-export type TrackingStatus = 'in_progress' | 'almost_done' | 'delivered' | 'issue';
 
 export interface Order {
   id: string;
@@ -26,7 +23,6 @@ export interface Order {
   orderDate: string;
   assignedStaff?: User;
   status: OrderStatus;
-  trackingStatus?: TrackingStatus; // Add separate tracking status
   details: {
     items: Array<{
       id: string;
@@ -43,24 +39,19 @@ export interface Order {
     completed?: string;
   };
   expectedCompletionTime?: number; // in minutes
-  images?: string[]; // URLs to uploaded images
-  trackingNotes?: TaskNote[]; // Notes added during tracking
 }
 
 // Staff types
 export interface StaffMember extends User {
-  sections: string[]; // Multiple sections (replaces department)
+  department: string;
   position: string;
   shiftStart: string;
   shiftEnd: string;
   daysOff: string[];
-  allowedCompletionTime?: number; // in minutes
   taskCompletionStats?: {
     averageTime: number;
     tasksCompleted: number;
     lateCompletions: number;
-    totalDelayMinutes: number; // Total minutes of delay across all tasks
-    delaysByDay: Record<string, number>; // Delays grouped by day (date string -> minutes)
   };
 }
 
@@ -81,11 +72,6 @@ export interface KnowledgeItem {
     id: string;
     name: string;
     type: 'image' | 'video' | 'document';
-    url: string;
-  }>;
-  externalLinks?: Array<{
-    id: string;
-    title: string;
     url: string;
   }>;
 }
@@ -122,36 +108,4 @@ export interface ApiIntegration {
   authType: 'api_key' | 'oauth' | 'basic';
   status: 'active' | 'inactive';
   lastSynced?: string;
-}
-
-// Custom section types
-export type SectionType = 'canva' | 'youtube' | 'discord' | 'linkedin' | 'fortnite';
-
-// Performance tracking
-export interface DelayReport {
-  orderId: string;
-  userId: string;
-  userName: string;
-  orderDate: string;
-  completionDate?: string;
-  allowedTime: number; // in minutes
-  actualTime?: number; // in minutes
-  delayTime?: number; // in minutes (negative means completed early)
-  status: OrderStatus;
-}
-
-// Define Guide Page type
-export interface GuidePage {
-  id: string;
-  title: string;
-  content: string;
-  createdBy: string;
-  createdAt: string;
-  updatedAt?: string;
-  images?: string[];
-  videoUrls?: string[];
-  externalLinks?: Array<{ 
-    title: string;
-    url: string;
-  }>;
 }

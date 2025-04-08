@@ -1,12 +1,10 @@
 
-import { ReactNode, useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { ReactNode, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import SidebarNav from "./SidebarNav";
 import { useAuth } from "@/context/AuthContext";
-import { useLanguage } from "@/context/LanguageContext";
 import { Toaster } from "sonner";
 import { AttendanceModal } from "../modals/AttendanceModal";
-import LanguageToggle from "../common/LanguageToggle";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -20,13 +18,8 @@ const DashboardLayout = ({
   allowedRoles,
 }: DashboardLayoutProps) => {
   const { isAuthenticated, currentUser, isLoading } = useAuth();
-  const { direction } = useLanguage();
   const navigate = useNavigate();
-  const location = useLocation();
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
 
-  // Only run the effect if we are inside a Router context
   useEffect(() => {
     // Check if authentication is required but user is not logged in
     if (requireAuth && !isLoading && !isAuthenticated) {
@@ -43,9 +36,9 @@ const DashboardLayout = ({
       !allowedRoles.includes(currentUser.role)
     ) {
       // Redirect based on user role
-      if (currentUser.role === "employee") {
+      if (currentUser.role === "team") {
         navigate("/team/tasks");
-      } else if (currentUser.role === "admin") {
+      } else if (currentUser.role === "admin" || currentUser.role === "manager") {
         navigate("/admin/orders");
       } else if (currentUser.role === "developer") {
         navigate("/developer");
@@ -72,37 +65,16 @@ const DashboardLayout = ({
     return null;
   }
 
-  // Dummy data for the attendance modal
-  const dummyStaffMember = currentUser || {
-    id: "dummy",
-    name: "User",
-    email: "user@example.com",
-    role: "employee",
-    shiftStart: "09:00",
-    shiftEnd: "17:00"
-  };
-
   return (
-    <div className={`flex h-screen bg-gray-50 ${direction === "rtl" ? "text-right" : ""}`}>
-      <SidebarNav 
-        isCollapsed={isCollapsed} 
-        onToggle={() => setIsCollapsed(!isCollapsed)} 
-      />
+    <div className="flex h-screen bg-gray-50">
+      <SidebarNav />
       <div className="flex flex-1 flex-col lg:pl-64">
-        <div className="p-4 flex justify-end">
-          <LanguageToggle />
-        </div>
         <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
           {children}
         </main>
       </div>
       <Toaster position="top-right" />
-      <AttendanceModal 
-        isOpen={isAttendanceModalOpen}
-        onClose={() => setIsAttendanceModalOpen(false)}
-        staffMember={dummyStaffMember as any}
-        onAttendanceSubmit={() => {}}
-      />
+      <AttendanceModal />
     </div>
   );
 };

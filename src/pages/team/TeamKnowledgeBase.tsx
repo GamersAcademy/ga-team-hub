@@ -29,7 +29,7 @@ const TeamKnowledgeBase = () => {
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
   const [typeFilter, setTypeFilter] = useState<KnowledgeType | null>(null);
 
-  // Filter items based on search, category, type and sections
+  // Filter items based on search, category, type and department
   const filteredItems = items.filter((item) => {
     const matchesSearch =
       !searchQuery ||
@@ -39,14 +39,14 @@ const TeamKnowledgeBase = () => {
     const matchesCategory = !categoryFilter || item.category === categoryFilter;
     const matchesType = !typeFilter || item.type === typeFilter;
     
-    // Only show section-specific content if it matches current user's sections
-    // or if it's not section specific
-    const matchesSections = 
+    // Only show department-specific content if it matches current user's department
+    // or if it's not department specific
+    const matchesDepartment = 
       !item.department || 
-      !currentUser?.sections || 
-      currentUser.sections.includes(item.department);
+      !currentUser?.department || 
+      item.department === currentUser.department;
 
-    return matchesSearch && matchesCategory && matchesType && matchesSections;
+    return matchesSearch && matchesCategory && matchesType && matchesDepartment;
   });
 
   // Extract unique categories for filter
@@ -55,7 +55,7 @@ const TeamKnowledgeBase = () => {
   );
 
   return (
-    <DashboardLayout allowedRoles={["employee"]}>
+    <DashboardLayout allowedRoles={["team"]}>
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold mb-1">Knowledge Base</h1>

@@ -1,216 +1,210 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import LanguageToggle from "@/components/common/LanguageToggle";
-import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import {
-  BarChart3,
-  BookOpen,
-  ChevronLeft,
-  ChevronRight,
   ClipboardList,
-  Container,
-  LayoutDashboard,
-  LogOut,
-  Package2,
-  Settings,
-  User2,
   Users,
+  BookOpen,
+  Code,
+  LogOut,
+  Menu,
+  X,
+  Bell,
+  CheckCircle2,
+  User,
+  Home
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
-interface SidebarNavProps extends React.HTMLAttributes<HTMLDivElement> {
-  isCollapsed?: boolean;
-  onToggle: () => void;
+interface NavItem {
+  title: string;
+  href: string;
+  icon: React.ReactNode;
 }
 
-export function SidebarNav({
-  isCollapsed,
-  onToggle,
-  className,
-  ...props
-}: SidebarNavProps) {
-  const { t, direction } = useLanguage();
-  const { pathname } = useLocation();
+const SidebarNav = () => {
   const { currentUser, logout } = useAuth();
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const location = useLocation();
+  const isMobile = useIsMobile();
+  const [isOpen, setIsOpen] = useState(false);
 
-  // Items for admin navigation
-  const adminItems = [
+  // Admin and manager navigation items
+  const adminNavItems: NavItem[] = [
     {
-      title: t("orders"),
+      title: "Orders Dashboard",
       href: "/admin/orders",
-      icon: Package2,
-      isActive: pathname.includes("/admin/orders"),
+      icon: <ClipboardList className="h-5 w-5" />,
     },
     {
-      title: t("team"),
+      title: "Team Management",
       href: "/admin/team",
-      icon: Users,
-      isActive: pathname.includes("/admin/team"),
+      icon: <Users className="h-5 w-5" />,
     },
     {
-      title: t("knowledge"),
+      title: "Knowledge Base",
       href: "/admin/knowledge",
-      icon: BookOpen,
-      isActive: pathname.includes("/admin/knowledge"),
-    },
-    {
-      title: t("performanceStats"),
-      href: "/admin/performance",
-      icon: BarChart3,
-      isActive: pathname.includes("/admin/performance"),
+      icon: <BookOpen className="h-5 w-5" />,
     },
   ];
 
-  // Items for employee navigation
-  const employeeItems = [
+  // Team member navigation items
+  const teamNavItems: NavItem[] = [
     {
-      title: t("myTasks"),
+      title: "My Tasks",
       href: "/team/tasks",
-      icon: ClipboardList,
-      isActive: pathname.includes("/team/tasks"),
+      icon: <ClipboardList className="h-5 w-5" />,
     },
     {
-      title: t("teamKnowledge"),
+      title: "Knowledge Base",
       href: "/team/knowledge",
-      icon: BookOpen,
-      isActive: pathname.includes("/team/knowledge"),
+      icon: <BookOpen className="h-5 w-5" />,
     },
   ];
 
-  // Items for developer navigation
-  const developerItems = [
+  // Developer navigation items
+  const developerNavItems: NavItem[] = [
     {
-      title: t("dashboard"),
+      title: "API Dashboard",
       href: "/developer",
-      icon: LayoutDashboard,
-      isActive: pathname.includes("/developer"),
+      icon: <Code className="h-5 w-5" />,
     },
   ];
 
-  // Determine which navigation items to show based on user role
-  let navItems = [];
-  if (currentUser?.role === "admin") {
-    navItems = adminItems;
-  } else if (currentUser?.role === "employee") {
-    navItems = employeeItems;
-  } else if (currentUser?.role === "developer") {
-    navItems = developerItems;
-  }
+  // Determine which nav items to use based on user role
+  const navItems =
+    currentUser?.role === "admin" || currentUser?.role === "manager"
+      ? adminNavItems
+      : currentUser?.role === "developer"
+      ? developerNavItems
+      : teamNavItems;
 
-  return (
-    <div
-      className={cn(
-        "flex flex-col",
-        isCollapsed ? "w-[70px]" : "w-[240px]",
-        className
-      )}
-    >
-      <div className="flex h-14 items-center justify-between px-4 border-b">
-        {!isCollapsed ? (
-          <div className="flex items-center">
-            <Container className="h-6 w-6 mr-2" />
-            <span className="font-bold">OrderFlow</span>
-          </div>
-        ) : (
-          <Container className="h-6 w-6 mx-auto" />
-        )}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={onToggle}
-        >
-          {isCollapsed ? (
-            <ChevronRight className="h-4 w-4" />
-          ) : direction === "rtl" ? (
-            <ChevronLeft className="h-4 w-4" />
-          ) : (
-            <ChevronRight className="h-4 w-4" />
-          )}
-        </Button>
+  // Close sidebar when route changes on mobile
+  useEffect(() => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
+  }, [location.pathname, isMobile]);
+
+  const SidebarContent = () => (
+    <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
+      {/* Logo and header */}
+      <div className="flex h-16 items-center border-b border-sidebar-border px-6">
+        <Link to="/" className="flex items-center gap-2">
+          <CheckCircle2 className="h-6 w-6 text-teal-500" />
+          <h1 className="text-xl font-bold">OrderFlow Hub</h1>
+        </Link>
       </div>
-      <ScrollArea
-        className={cn(
-          "flex flex-col flex-1 bg-background p-2 gap-2",
-          isCollapsed && "p-1 gap-1"
-        )}
-      >
-        {navItems.map((item, index) => (
-          <Link
-            key={index}
-            to={item.href}
-            className="no-underline"
-            onMouseEnter={() => setHoveredItem(item.title)}
-            onMouseLeave={() => setHoveredItem(null)}
-          >
-            <Button
-              variant={item.isActive ? "default" : "ghost"}
-              className={cn(
-                "w-full justify-start",
-                isCollapsed && "justify-center px-2"
-              )}
-              size={isCollapsed ? "icon" : "default"}
-            >
-              <item.icon className={isCollapsed ? "h-5 w-5" : "h-4 w-4 mr-3"} />
-              {!isCollapsed && <span>{item.title}</span>}
-            </Button>
-            {isCollapsed && hoveredItem === item.title && (
-              <div className="absolute z-50 left-16 bg-background border shadow-md rounded p-2 text-sm whitespace-nowrap">
-                {item.title}
-              </div>
-            )}
-          </Link>
-        ))}
-      </ScrollArea>
-      <div className="flex flex-col gap-2 p-2">
-        <div className="flex justify-center">
-          <LanguageToggle />
-        </div>
-        {!isCollapsed && currentUser && (
-          <div className="flex items-center gap-3 px-3 py-2">
-            <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-              {currentUser.avatar ? (
-                <img
-                  src={currentUser.avatar}
-                  alt={currentUser.name}
-                  className="h-8 w-8 rounded-full"
-                />
-              ) : (
-                <User2 className="h-5 w-5 text-gray-500" />
-              )}
-            </div>
-            <div className="flex-1 overflow-hidden">
-              <p className="text-sm font-medium truncate">
-                {currentUser.name}
-              </p>
-              <p className="text-xs text-muted-foreground truncate">
-                {currentUser.role}
-                {currentUser.sections && currentUser.sections.length > 0
-                  ? ` - ${currentUser.sections[0]}`
-                  : ""}
-              </p>
-            </div>
+
+      {/* User info */}
+      {currentUser && (
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-sidebar-border">
+          <Avatar>
+            <AvatarImage src={currentUser.avatar} />
+            <AvatarFallback>
+              {currentUser.name.substring(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 overflow-hidden">
+            <p className="text-sm font-medium leading-none truncate">
+              {currentUser.name}
+            </p>
+            <p className="text-xs text-muted-foreground capitalize">
+              {currentUser.role}
+              {currentUser.department && ` • ${currentUser.department}`}
+            </p>
           </div>
-        )}
+        </div>
+      )}
+
+      {/* Navigation links */}
+      <nav className="flex-1 px-3 py-4 overflow-y-auto">
+        <ul className="space-y-1">
+          {navItems.map((item) => (
+            <li key={item.href}>
+              <Link
+                to={item.href}
+                className={cn(
+                  "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                  location.pathname === item.href &&
+                    "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                )}
+              >
+                {item.icon}
+                {item.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* Logout button */}
+      <div className="px-3 py-4 border-t border-sidebar-border mt-auto">
         <Button
-          variant="ghost"
-          className={cn(
-            "w-full justify-start",
-            isCollapsed && "justify-center px-2"
-          )}
-          onClick={() => logout()}
+          variant="outline"
+          className="w-full justify-start gap-2"
+          onClick={logout}
         >
-          <LogOut className={isCollapsed ? "h-5 w-5" : "h-4 w-4 mr-2"} />
-          {!isCollapsed && <span>{t("logout")}</span>}
+          <LogOut className="h-4 w-4" />
+          Logout
         </Button>
       </div>
     </div>
   );
-}
+
+  if (isMobile) {
+    return (
+      <>
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 lg:px-6">
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" className="lg:hidden">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle navigation menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-64 p-0">
+              <SidebarContent />
+            </SheetContent>
+          </Sheet>
+
+          <div className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2 lg:hidden">
+              <CheckCircle2 className="h-6 w-6 text-teal-500" />
+              <span className="font-bold">OrderFlow</span>
+            </Link>
+          </div>
+
+          <div className="flex flex-1 items-center justify-end gap-4">
+            <Button variant="outline" size="icon">
+              <Bell className="h-5 w-5" />
+              <span className="sr-only">Notifications</span>
+            </Button>
+            <Button variant="ghost" size="icon" asChild>
+              <Link to="/profile">
+                <User className="h-5 w-5" />
+                <span className="sr-only">Profile</span>
+              </Link>
+            </Button>
+          </div>
+        </header>
+      </>
+    );
+  }
+
+  return (
+    <div className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0 z-50">
+      <SidebarContent />
+    </div>
+  );
+};
 
 export default SidebarNav;
