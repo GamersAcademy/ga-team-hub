@@ -9,6 +9,9 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   isLoggedIn: boolean;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  redirectBasedOnRole: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -28,7 +31,24 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
+
+  // Check if authentication state is ready
+  const isAuthenticated = !!currentUser;
+
+  // Redirect based on user role
+  const redirectBasedOnRole = () => {
+    if (!currentUser) return;
+    
+    if (currentUser.role === 'admin') {
+      navigate('/admin/orders');
+    } else if (currentUser.role === 'employee') {
+      navigate('/team/tasks');
+    } else if (currentUser.role === 'developer') {
+      navigate('/developer');
+    }
+  };
 
   useEffect(() => {
     // Check if already logged in from local storage
@@ -55,6 +75,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // If not logged in, redirect to login
       navigate('/login');
     }
+    
+    // Set loading to false after authentication check
+    setIsLoading(false);
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
@@ -93,7 +116,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, login, logout, isLoggedIn }}>
+    <AuthContext.Provider value={{ 
+      currentUser, 
+      login, 
+      logout, 
+      isLoggedIn, 
+      isAuthenticated, 
+      isLoading,
+      redirectBasedOnRole 
+    }}>
       {children}
     </AuthContext.Provider>
   );

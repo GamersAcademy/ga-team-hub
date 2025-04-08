@@ -1,5 +1,5 @@
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import SidebarNav from "./SidebarNav";
 import { useAuth } from "@/context/AuthContext";
@@ -23,6 +23,8 @@ const DashboardLayout = ({
   const { direction } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
 
   // Only run the effect if we are inside a Router context
   useEffect(() => {
@@ -70,9 +72,22 @@ const DashboardLayout = ({
     return null;
   }
 
+  // Dummy data for the attendance modal
+  const dummyStaffMember = currentUser || {
+    id: "dummy",
+    name: "User",
+    email: "user@example.com",
+    role: "employee",
+    shiftStart: "09:00",
+    shiftEnd: "17:00"
+  };
+
   return (
     <div className={`flex h-screen bg-gray-50 ${direction === "rtl" ? "text-right" : ""}`}>
-      <SidebarNav />
+      <SidebarNav 
+        isCollapsed={isCollapsed} 
+        onToggle={() => setIsCollapsed(!isCollapsed)} 
+      />
       <div className="flex flex-1 flex-col lg:pl-64">
         <div className="p-4 flex justify-end">
           <LanguageToggle />
@@ -82,7 +97,12 @@ const DashboardLayout = ({
         </main>
       </div>
       <Toaster position="top-right" />
-      <AttendanceModal />
+      <AttendanceModal 
+        isOpen={isAttendanceModalOpen}
+        onClose={() => setIsAttendanceModalOpen(false)}
+        staffMember={dummyStaffMember as any}
+        onAttendanceSubmit={() => {}}
+      />
     </div>
   );
 };
