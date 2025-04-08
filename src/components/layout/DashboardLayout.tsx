@@ -1,6 +1,6 @@
 
 import { ReactNode, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import SidebarNav from "./SidebarNav";
 import { useAuth } from "@/context/AuthContext";
 import { Toaster } from "sonner";
@@ -19,7 +19,9 @@ const DashboardLayout = ({
 }: DashboardLayoutProps) => {
   const { isAuthenticated, currentUser, isLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
+  // Only run the effect if we are inside a Router context
   useEffect(() => {
     // Check if authentication is required but user is not logged in
     if (requireAuth && !isLoading && !isAuthenticated) {
