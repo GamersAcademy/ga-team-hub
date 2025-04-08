@@ -24,12 +24,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { mockStaffMembers, mockAttendanceRecords } from "@/data/mockData";
-import { StaffMember, AttendanceRecord, DelayReport } from "@/types";
+import { StaffMember, AttendanceRecord, DelayReport, OrderStatus } from "@/types";
 import { DataTable } from "@/components/ui/DataTable";
 import {
   AlertCircle,
   Calendar,
-  ChartBarIcon,
+  BarChart,
   Clock,
   Download,
   Filter,
@@ -46,11 +46,7 @@ import { cn } from "@/lib/utils";
 
 const TeamManagement = () => {
   const { t, direction } = useLanguage();
-  const [staff, setStaff] = useState<StaffMember[]>(mockStaffMembers.map(s => ({
-    ...s, 
-    sections: s.department ? [s.department] : [],
-    role: s.role === "team" ? "employee" : s.role // Convert to new role name
-  })));
+  const [staff, setStaff] = useState<StaffMember[]>(mockStaffMembers);
   const [attendance, setAttendance] = useState<AttendanceRecord[]>(mockAttendanceRecords);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddingStaff, setIsAddingStaff] = useState(false);
@@ -110,7 +106,7 @@ const TeamManagement = () => {
       id: `staff-${Date.now()}`,
       name: newStaff.name || "",
       email: newStaff.email || "",
-      role: newStaff.role as "employee" | "admin",
+      role: newStaff.role as "employee" | "admin" | "developer",
       sections: newStaff.sections || ["canva"],
       position: newStaff.position || "Team Member",
       shiftStart: newStaff.shiftStart || "09:00",
@@ -164,7 +160,7 @@ const TeamManagement = () => {
     },
     {
       key: "clockOut",
-      label: t("clockOut"),
+      label: t("checkOut"),
       render: (value: string) => value || t("notClockedOut"),
     },
     {
@@ -217,7 +213,7 @@ const TeamManagement = () => {
               className="gap-2"
               onClick={() => setShowPerformanceReport(!showPerformanceReport)}
             >
-              <ChartBarIcon className="h-4 w-4" />
+              <BarChart className="h-4 w-4" />
               {t("performanceReport")}
             </Button>
             
@@ -273,7 +269,7 @@ const TeamManagement = () => {
                       <Select
                         value={newStaff.role || "employee"}
                         onValueChange={(value) =>
-                          setNewStaff({ ...newStaff, role: value as "employee" | "admin" })
+                          setNewStaff({ ...newStaff, role: value as "employee" | "admin" | "developer" })
                         }
                       >
                         <SelectTrigger id="role">
@@ -282,6 +278,7 @@ const TeamManagement = () => {
                         <SelectContent>
                           <SelectItem value="employee">{t("employee")}</SelectItem>
                           <SelectItem value="admin">{t("admin")}</SelectItem>
+                          <SelectItem value="developer">{t("developer")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -546,6 +543,3 @@ const TeamManagement = () => {
 };
 
 export default TeamManagement;
-
-// Import ChartBarIcon from lucide
-import { BarChart as ChartBarIcon } from "lucide-react";

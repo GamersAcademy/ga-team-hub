@@ -16,12 +16,13 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon, Download } from "lucide-react";
 import { mockStaffMembers, mockAttendanceRecords } from "@/data/mockData";
 import { Badge } from "@/components/ui/badge";
+import { DateRange } from "react-day-picker";
 
 const PerformanceStats = () => {
   const { t } = useLanguage();
   const [filterType, setFilterType] = useState<"day" | "month" | "range">("day");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [dateRange, setDateRange] = useState<{ from: Date | undefined; to: Date | undefined }>({
+  const [dateRange, setDateRange] = useState<DateRange>({
     from: undefined,
     to: undefined,
   });

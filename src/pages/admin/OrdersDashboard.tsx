@@ -10,7 +10,6 @@ import { Order, OrderStatus } from "@/types";
 import { useLanguage } from "@/context/LanguageContext";
 import {
   AlertCircle,
-  Bell,
   CheckCircle2,
   Clock,
   Loader2,

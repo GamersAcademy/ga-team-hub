@@ -12,13 +12,11 @@ import { useLanguage } from "@/context/LanguageContext";
 import TaskTimer from "@/components/countdown/TaskTimer";
 import {
   AlertCircle,
-  Bell,
   CheckCircle2,
   Clock,
   Loader2,
   RefreshCcw,
   Search,
-  XCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 
