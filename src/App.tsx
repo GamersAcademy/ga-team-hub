@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import OrdersDashboard from "./pages/admin/OrdersDashboard";
 import TeamManagement from "./pages/admin/TeamManagement";
 import KnowledgeBase from "./pages/admin/KnowledgeBase";
+import PerformanceStats from "./pages/admin/PerformanceStats";
 import MyTasks from "./pages/team/MyTasks";
 import TeamKnowledgeBase from "./pages/team/TeamKnowledgeBase";
 import DeveloperDashboard from "./pages/developer/DeveloperDashboard";
@@ -34,6 +35,7 @@ const App = () => (
               <Route path="/admin/orders" element={<OrdersDashboard />} />
               <Route path="/admin/team" element={<TeamManagement />} />
               <Route path="/admin/knowledge" element={<KnowledgeBase />} />
+              <Route path="/admin/performance" element={<PerformanceStats />} />
               
               {/* Team Routes */}
               <Route path="/team/tasks" element={<MyTasks />} />

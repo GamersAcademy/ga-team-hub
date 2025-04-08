@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/LanguageContext";
-import { Languages } from "lucide-react";
+import { Globe } from "lucide-react";
 
 export const LanguageToggle = () => {
   const { language, toggleLanguage } = useLanguage();
@@ -13,7 +13,7 @@ export const LanguageToggle = () => {
       className="flex items-center gap-1"
       onClick={toggleLanguage}
     >
-      <Languages className="h-4 w-4" />
+      <Globe className="h-4 w-4" />
       <span>{language === "en" ? "العربية" : "English"}</span>
     </Button>
   );

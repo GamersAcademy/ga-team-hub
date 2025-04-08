@@ -19,6 +19,9 @@ import { Clock, FileText, Image, Upload } from "lucide-react";
 import { Order, OrderStatus, TaskNote } from "@/types";
 import { toast } from "sonner";
 
+// Define tracking status type separate from order status
+type TrackingStatus = "in_progress" | "almost_done" | "delivered" | "issue";
+
 interface TrackDialogProps {
   order: Order;
   open: boolean;
@@ -39,6 +42,8 @@ export const TrackDialog = ({
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [status, setStatus] = useState(order.status);
+  // Add separate tracking status
+  const [trackingStatus, setTrackingStatus] = useState<TrackingStatus>("in_progress");
   const [estimatedHours, setEstimatedHours] = useState(0);
   const [estimatedMinutes, setEstimatedMinutes] = useState(0);
   const [estimatedSeconds, setEstimatedSeconds] = useState(0);
@@ -95,7 +100,7 @@ export const TrackDialog = ({
         <DialogHeader>
           <DialogTitle>{t("track")} - {t("orderProgress")}</DialogTitle>
           <DialogDescription>
-            {t("ordersDashboard")} #{order.orderId}
+            {t("orders")} #{order.orderId}
           </DialogDescription>
         </DialogHeader>
 
@@ -112,10 +117,28 @@ export const TrackDialog = ({
                   <SelectValue placeholder={t("orderStatus")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pending">{t("shipping")}</SelectItem>
-                  <SelectItem value="in_progress">{t("almostDone")}</SelectItem>
+                  <SelectItem value="pending">{t("awaitingReview")}</SelectItem>
+                  <SelectItem value="in_progress">{t("pendingConfirmation")}</SelectItem>
                   <SelectItem value="completed">{t("completed")}</SelectItem>
-                  <SelectItem value="cancelled">{t("issue")}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            {/* Tracking Status - separate from order status */}
+            <div className="space-y-2">
+              <Label htmlFor="trackingStatus">{t("trackingStatus")}</Label>
+              <Select 
+                value={trackingStatus} 
+                onValueChange={(value) => setTrackingStatus(value as TrackingStatus)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={t("trackingStatus")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="in_progress">{t("shipping")}</SelectItem>
+                  <SelectItem value="almost_done">{t("almostDone")}</SelectItem>
+                  <SelectItem value="delivered">{t("delivered")}</SelectItem>
+                  <SelectItem value="issue">{t("issue")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -265,7 +288,7 @@ export const TrackDialog = ({
             {t("cancel")}
           </Button>
           <Button onClick={handleSave}>
-            {t("saveNote")}
+            {t("save")}
           </Button>
         </DialogFooter>
       </DialogContent>

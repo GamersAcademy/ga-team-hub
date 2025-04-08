@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 type Language = "en" | "ar";
@@ -84,6 +83,10 @@ const translations: Translations = {
     en: "Knowledge Base",
     ar: "قاعدة المعرفة"
   },
+  "performance": {
+    en: "Performance",
+    ar: "الأداء"
+  },
   
   // Orders & Tasks
   "ordersDashboard": {
@@ -166,11 +169,27 @@ const translations: Translations = {
   },
   "almostDone": {
     en: "Almost Done",
-    ar: "ما بقى شي ويتم"
+    ar: "على وشك الانتهاء"
+  },
+  "delivered": {
+    en: "Delivered",
+    ar: "تم الطلب"
   },
   "issue": {
     en: "Issue with Order",
     ar: "مشكلة في الطلب"
+  },
+  "awaitingReview": {
+    en: "Awaiting Review",
+    ar: "بانتظار المراجعة"
+  },
+  "pendingConfirmation": {
+    en: "Pending Confirmation",
+    ar: "قيد التأكيد"
+  },
+  "unknown": {
+    en: "Unknown",
+    ar: "غير معروف"
   },
   
   // Team Management
@@ -207,7 +226,7 @@ const translations: Translations = {
     ar: "سجلات الحضور"
   },
   "searchStaff": {
-    en: "Search staff by name or department...",
+    en: "Search staff by name or section...",
     ar: "البحث عن الموظفين بالاسم أو القسم..."
   },
   "sections": {
@@ -268,6 +287,10 @@ const translations: Translations = {
     en: "Order Status",
     ar: "حالة الطلب"
   },
+  "trackingStatus": {
+    en: "Tracking Status",
+    ar: "حالة التتبع"
+  },
   "estimatedCompletion": {
     en: "Estimated Completion Time",
     ar: "الوقت المقدر للإنجاز"
@@ -291,6 +314,94 @@ const translations: Translations = {
   "overtime": {
     en: "Overtime",
     ar: "وقت إضافي"
+  },
+  "cancel": {
+    en: "Cancel",
+    ar: "إلغاء"
+  },
+  "save": {
+    en: "Save",
+    ar: "حفظ"
+  },
+  "close": {
+    en: "Close",
+    ar: "إغلاق"
+  },
+  
+  // Knowledge Base
+  "addNewGuide": {
+    en: "Add New Guide Page",
+    ar: "إضافة صفحة دليل جديدة"
+  },
+  "title": {
+    en: "Title",
+    ar: "العنوان"
+  },
+  "content": {
+    en: "Content",
+    ar: "المحتوى"
+  },
+  "addLink": {
+    en: "Add External Link",
+    ar: "إضافة رابط خارجي"
+  },
+  "uploadFile": {
+    en: "Upload File",
+    ar: "تحميل ملف"
+  },
+  
+  // Performance Page
+  "performancePage": {
+    en: "Performance Stats",
+    ar: "إحصائيات الأداء"
+  },
+  "filterBy": {
+    en: "Filter By",
+    ar: "تصفية حسب"
+  },
+  "day": {
+    en: "Day",
+    ar: "يوم"
+  },
+  "month": {
+    en: "Month",
+    ar: "شهر"
+  },
+  "dateRange": {
+    en: "Date Range",
+    ar: "نطاق التاريخ"
+  },
+  "attendanceData": {
+    en: "Attendance Data",
+    ar: "بيانات الحضور"
+  },
+  "checkIn": {
+    en: "Check In",
+    ar: "تسجيل الحضور"
+  },
+  "checkOut": {
+    en: "Check Out",
+    ar: "تسجيل الانصراف"
+  },
+  "delay": {
+    en: "Delay",
+    ar: "تأخير"
+  },
+  "orderCompletionData": {
+    en: "Order Completion Data",
+    ar: "بيانات إنجاز الطلبات"
+  },
+  "timeAllowed": {
+    en: "Time Allowed",
+    ar: "الوقت المسموح به"
+  },
+  "timeTaken": {
+    en: "Time Taken",
+    ar: "الوقت المستغرق"
+  },
+  "submission": {
+    en: "Submission",
+    ar: "الإرسال"
   }
 };
 
@@ -317,7 +428,7 @@ interface LanguageProviderProps {
 
 export const LanguageProvider = ({ children }: LanguageProviderProps) => {
   const [language, setLanguage] = useState<Language>("en");
-  const direction: Direction = language === "ar" ? "rtl" : "ltr";
+  const direction: Direction = "ltr";
 
   const toggleLanguage = () => {
     setLanguage(prev => prev === "en" ? "ar" : "en");
@@ -332,10 +443,8 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
   };
 
   useEffect(() => {
-    // Set direction attribute on document.body
-    document.body.dir = direction;
     document.documentElement.lang = language;
-  }, [direction, language]);
+  }, [language]);
 
   const value = {
     language,

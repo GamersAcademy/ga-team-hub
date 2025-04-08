@@ -14,6 +14,9 @@ export interface User {
 // Order types
 export type OrderStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled';
 
+// New tracking status type for the Track functionality
+export type TrackingStatus = 'in_progress' | 'almost_done' | 'delivered' | 'issue';
+
 export interface Order {
   id: string;
   orderId: string;
@@ -23,6 +26,7 @@ export interface Order {
   orderDate: string;
   assignedStaff?: User;
   status: OrderStatus;
+  trackingStatus?: TrackingStatus; // Add separate tracking status
   details: {
     items: Array<{
       id: string;
@@ -79,6 +83,11 @@ export interface KnowledgeItem {
     type: 'image' | 'video' | 'document';
     url: string;
   }>;
+  externalLinks?: Array<{
+    id: string;
+    title: string;
+    url: string;
+  }>;
 }
 
 // Attendance types
@@ -129,4 +138,20 @@ export interface DelayReport {
   actualTime?: number; // in minutes
   delayTime?: number; // in minutes (negative means completed early)
   status: OrderStatus;
+}
+
+// Define Guide Page type
+export interface GuidePage {
+  id: string;
+  title: string;
+  content: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt?: string;
+  images?: string[];
+  videoUrls?: string[];
+  externalLinks?: Array<{ 
+    title: string;
+    url: string;
+  }>;
 }

@@ -42,10 +42,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-function cn(...classes: (string | undefined | boolean)[]) {
-  return classes.filter(Boolean).join(' ');
-}
-
 interface OrderCardProps {
   order: Order;
   isDetailView?: boolean;
