@@ -3,8 +3,10 @@ import { ReactNode, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import SidebarNav from "./SidebarNav";
 import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { Toaster } from "sonner";
 import { AttendanceModal } from "../modals/AttendanceModal";
+import LanguageToggle from "../common/LanguageToggle";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -18,6 +20,7 @@ const DashboardLayout = ({
   allowedRoles,
 }: DashboardLayoutProps) => {
   const { isAuthenticated, currentUser, isLoading } = useAuth();
+  const { direction } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -38,9 +41,9 @@ const DashboardLayout = ({
       !allowedRoles.includes(currentUser.role)
     ) {
       // Redirect based on user role
-      if (currentUser.role === "team") {
+      if (currentUser.role === "employee") {
         navigate("/team/tasks");
-      } else if (currentUser.role === "admin" || currentUser.role === "manager") {
+      } else if (currentUser.role === "admin") {
         navigate("/admin/orders");
       } else if (currentUser.role === "developer") {
         navigate("/developer");
@@ -68,9 +71,12 @@ const DashboardLayout = ({
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className={`flex h-screen bg-gray-50 ${direction === "rtl" ? "text-right" : ""}`}>
       <SidebarNav />
       <div className="flex flex-1 flex-col lg:pl-64">
+        <div className="p-4 flex justify-end">
+          <LanguageToggle />
+        </div>
         <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
           {children}
         </main>
