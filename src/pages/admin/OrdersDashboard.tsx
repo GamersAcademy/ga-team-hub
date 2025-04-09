@@ -31,7 +31,7 @@ const OrdersDashboard = () => {
   useEffect(() => {
     const filtered = orders.filter((order) => {
       const matchesSearch =
-        searchQuery === "" ||
+        !searchQuery ||
         order.orderId.toLowerCase().includes(searchQuery.toLowerCase()) ||
         order.customerName.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -48,7 +48,7 @@ const OrdersDashboard = () => {
   const handleStatusChange = (orderId: string, status: OrderStatus) => {
     const updatedOrders = orders.map((order) => {
       if (order.id === orderId) {
-        const timeline = order.timeline || {};
+        const timeline = { ...order.timeline } || {};
         
         // Update timeline based on status
         if (status === "in_progress") {
@@ -218,26 +218,7 @@ const OrdersDashboard = () => {
               <OrderCard
                 key={order.id}
                 order={order}
-                onStatusChange={(orderId, status) => {
-                  const updatedOrders = orders.map((ord) => {
-                    if (ord.id === orderId) {
-                      const timeline = ord.timeline || {};
-                      
-                      // Update timeline based on status
-                      if (status === "in_progress") {
-                        timeline.started = new Date().toISOString();
-                      } else if (status === "completed") {
-                        timeline.completed = new Date().toISOString();
-                      }
-                      
-                      return { ...ord, status, timeline };
-                    }
-                    return ord;
-                  });
-                  
-                  setOrders(updatedOrders);
-                  toast.success(`Order status updated to ${status}`);
-                }}
+                onStatusChange={handleStatusChange}
               />
             ))}
           </div>

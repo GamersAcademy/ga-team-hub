@@ -14,44 +14,37 @@ import MyTasks from "./pages/team/MyTasks";
 import TeamKnowledgeBase from "./pages/team/TeamKnowledgeBase";
 import DeveloperDashboard from "./pages/developer/DeveloperDashboard";
 import { AuthProvider } from "./context/AuthContext";
-import { LanguageProvider } from "./context/LanguageContext";
-import PerformanceDashboard from "./pages/admin/PerformanceDashboard";
-import TutorialsDashboard from "./pages/admin/TutorialsDashboard";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
-      <LanguageProvider>
-        <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              
-              {/* Admin Routes */}
-              <Route path="/admin/orders" element={<OrdersDashboard />} />
-              <Route path="/admin/team" element={<TeamManagement />} />
-              <Route path="/admin/knowledge" element={<KnowledgeBase />} />
-              <Route path="/admin/performance" element={<PerformanceDashboard />} />
-              <Route path="/admin/tutorials" element={<TutorialsDashboard />} />
-              
-              {/* Team Routes */}
-              <Route path="/team/tasks" element={<MyTasks />} />
-              <Route path="/team/knowledge" element={<TeamKnowledgeBase />} />
-              
-              {/* Developer Routes */}
-              <Route path="/developer" element={<DeveloperDashboard />} />
-              
-              {/* Catch-all 404 */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </TooltipProvider>
-        </AuthProvider>
-      </LanguageProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin/orders" element={<OrdersDashboard />} />
+            <Route path="/admin/team" element={<TeamManagement />} />
+            <Route path="/admin/knowledge" element={<KnowledgeBase />} />
+            
+            {/* Team Routes */}
+            <Route path="/team/tasks" element={<MyTasks />} />
+            <Route path="/team/knowledge" element={<TeamKnowledgeBase />} />
+            
+            {/* Developer Routes */}
+            <Route path="/developer" element={<DeveloperDashboard />} />
+            
+            {/* Catch-all 404 */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </TooltipProvider>
+      </AuthProvider>
     </BrowserRouter>
   </QueryClientProvider>
 );

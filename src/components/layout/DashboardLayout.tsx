@@ -1,11 +1,10 @@
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SidebarNav from "./SidebarNav";
 import { useAuth } from "@/context/AuthContext";
 import { Toaster } from "sonner";
 import { AttendanceModal } from "../modals/AttendanceModal";
-import { toast as sonnerToast } from "sonner";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -20,8 +19,6 @@ const DashboardLayout = ({
 }: DashboardLayoutProps) => {
   const { isAuthenticated, currentUser, isLoading } = useAuth();
   const navigate = useNavigate();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
 
   useEffect(() => {
     // Check if authentication is required but user is not logged in
@@ -68,39 +65,16 @@ const DashboardLayout = ({
     return null;
   }
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const openAttendanceModal = () => {
-    setIsAttendanceModalOpen(true);
-  };
-
-  const closeAttendanceModal = () => {
-    setIsAttendanceModalOpen(false);
-  };
-
   return (
     <div className="flex h-screen bg-gray-50">
-      <SidebarNav onToggle={toggleSidebar} />
+      <SidebarNav />
       <div className="flex flex-1 flex-col lg:pl-64">
         <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
           {children}
         </main>
       </div>
       <Toaster position="top-right" />
-      {currentUser && (
-        <AttendanceModal 
-          isOpen={isAttendanceModalOpen} 
-          onClose={closeAttendanceModal}
-          staffMember={currentUser}
-          onAttendanceSubmit={() => {
-            // Handle attendance submission
-            sonnerToast.success("Attendance recorded");
-            closeAttendanceModal();
-          }}
-        />
-      )}
+      <AttendanceModal />
     </div>
   );
 };
