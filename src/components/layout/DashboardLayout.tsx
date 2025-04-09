@@ -91,7 +91,7 @@ const DashboardLayout = ({
       <Toaster position="top-right" />
       {currentUser && (
         <AttendanceModal 
-          isOpen={isAttendanceModalOpen}
+          isOpen={isAttendanceModalOpen} 
           onClose={closeAttendanceModal}
           staffMember={currentUser}
           onAttendanceSubmit={() => {

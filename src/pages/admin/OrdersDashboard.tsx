@@ -48,7 +48,7 @@ const OrdersDashboard = () => {
   const handleStatusChange = (orderId: string, status: OrderStatus) => {
     const updatedOrders = orders.map((order) => {
       if (order.id === orderId) {
-        const timeline = { ...order.timeline } || {};
+        const timeline = order.timeline || {};
         
         // Update timeline based on status
         if (status === "in_progress") {
@@ -221,7 +221,7 @@ const OrdersDashboard = () => {
                 onStatusChange={(orderId, status) => {
                   const updatedOrders = orders.map((ord) => {
                     if (ord.id === orderId) {
-                      const timeline = { ...ord.timeline } || {};
+                      const timeline = ord.timeline || {};
                       
                       // Update timeline based on status
                       if (status === "in_progress") {

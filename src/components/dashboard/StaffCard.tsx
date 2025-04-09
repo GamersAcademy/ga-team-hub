@@ -97,6 +97,15 @@ export const StaffCard = ({ staff, onUpdate, onDelete }: StaffCardProps) => {
     }
   };
 
+  // Ensure daysOff property is handled safely
+  const renderDaysOff = () => {
+    if (!staff.daysOff) return "None";
+    if (Array.isArray(staff.daysOff)) {
+      return staff.daysOff.join(", ");
+    }
+    return staff.daysOff;
+  };
+
   return (
     <Card className="h-full">
       <CardHeader className="pb-2">
@@ -130,6 +139,7 @@ export const StaffCard = ({ staff, onUpdate, onDelete }: StaffCardProps) => {
           </DropdownMenu>
         </div>
       </CardHeader>
+      
       <CardContent className="space-y-2 pb-1">
         <div className="flex items-center gap-2 text-sm">
           <User className="h-4 w-4 text-muted-foreground" />
@@ -247,7 +257,7 @@ export const StaffCard = ({ staff, onUpdate, onDelete }: StaffCardProps) => {
                   <h4 className="text-sm font-medium">Days Off</h4>
                   <div className="flex items-center gap-2 text-sm mt-1">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span>{staff.daysOff.join(", ")}</span>
+                    <span>{renderDaysOff()}</span>
                   </div>
                 </div>
               </div>
@@ -352,3 +362,4 @@ export const StaffCard = ({ staff, onUpdate, onDelete }: StaffCardProps) => {
     </Card>
   );
 };
+
