@@ -87,6 +87,14 @@ export const StaffCard = ({ staff, onUpdate }: StaffCardProps) => {
     }
   };
 
+  // Function to safely handle displaying department
+  const renderDepartment = (department: string | string[]): string => {
+    if (Array.isArray(department)) {
+      return department.join(", ");
+    }
+    return department;
+  };
+
   return (
     <Card className="h-full">
       <CardHeader className="pb-2">
@@ -113,7 +121,7 @@ export const StaffCard = ({ staff, onUpdate }: StaffCardProps) => {
       <CardContent className="space-y-2 pb-1">
         <div className="flex items-center gap-2 text-sm">
           <User className="h-4 w-4 text-muted-foreground" />
-          <span>{staff.department}</span>
+          <span>{renderDepartment(staff.department)}</span>
         </div>
         
         <div className="flex items-center gap-2 text-sm">
@@ -174,7 +182,7 @@ export const StaffCard = ({ staff, onUpdate }: StaffCardProps) => {
                       <h3 className="font-medium text-lg">{staff.name}</h3>
                       <p className="text-sm text-muted-foreground">{staff.email}</p>
                       <p className="text-sm capitalize mt-1">
-                        {staff.position} • {staff.department}
+                        {staff.position} • {renderDepartment(staff.department)}
                       </p>
                     </div>
                   </div>

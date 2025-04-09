@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/button";
@@ -15,11 +14,13 @@ import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { useLanguage } from "@/context/LanguageContext";
 import { addDays, format } from "date-fns";
+import { toast } from "sonner";
+import { DateRange } from "react-day-picker";
 
 const PerformanceDashboard = () => {
   const { t } = useLanguage();
   const [filter, setFilter] = useState<"day" | "month" | "custom">("day");
-  const [dateRange, setDateRange] = useState({
+  const [dateRange, setDateRange] = useState<DateRange>({
     from: new Date(),
     to: addDays(new Date(), 7),
   });
@@ -35,6 +36,11 @@ const PerformanceDashboard = () => {
     status: Math.random() > 0.2 ? "on-time" : "late",
     lateMinutes: Math.random() > 0.2 ? 0 : Math.floor(Math.random() * 30) + 1
   }));
+
+  // Handle date range change
+  const handleDateRangeChange = (range: DateRange) => {
+    setDateRange(range);
+  };
 
   // Mock order execution data
   const orderExecutionData = mockUsers.flatMap(user => 
@@ -128,7 +134,7 @@ const PerformanceDashboard = () => {
               {filter === "custom" && (
                 <DateRangePicker 
                   date={dateRange}
-                  onDateChange={setDateRange}
+                  onDateChange={handleDateRangeChange}
                 />
               )}
             </div>

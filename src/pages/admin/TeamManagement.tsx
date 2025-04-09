@@ -55,11 +55,19 @@ const TeamManagement = () => {
     daysOff: ["Friday"],
   });
 
+  // Helper function to safely handle department string for searching
+  const getDepartmentString = (department: string | string[]): string => {
+    if (Array.isArray(department)) {
+      return department.join(" ");
+    }
+    return department;
+  };
+
   // Filtered staff based on search
   const filteredStaff = staff.filter(
     (member) =>
       member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      getDepartmentString(member.department).toLowerCase().includes(searchQuery.toLowerCase()) ||
       member.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
 

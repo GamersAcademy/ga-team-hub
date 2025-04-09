@@ -5,6 +5,7 @@ import SidebarNav from "./SidebarNav";
 import { useAuth } from "@/context/AuthContext";
 import { Toaster } from "sonner";
 import { AttendanceModal } from "../modals/AttendanceModal";
+import { toast } from "sonner";
 
 interface DashboardLayoutProps {
   children: ReactNode;
