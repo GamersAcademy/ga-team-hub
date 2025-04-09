@@ -43,7 +43,7 @@ const MyTasks = () => {
   useEffect(() => {
     const filtered = orders.filter((order) => {
       const matchesSearch =
-        !searchQuery ||
+        searchQuery === "" ||
         order.orderId.toLowerCase().includes(searchQuery.toLowerCase()) ||
         order.customerName.toLowerCase().includes(searchQuery.toLowerCase());
 
