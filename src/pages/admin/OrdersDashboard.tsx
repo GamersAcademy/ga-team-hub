@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { OrderCard } from "@/components/dashboard/OrderCard";
@@ -218,9 +219,9 @@ const OrdersDashboard = () => {
                 key={order.id}
                 order={order}
                 onStatusChange={(orderId, status) => {
-                  const updatedOrders = orders.map((order) => {
-                    if (order.id === orderId) {
-                      const timeline = { ...order.timeline } || {};
+                  const updatedOrders = orders.map((ord) => {
+                    if (ord.id === orderId) {
+                      const timeline = { ...ord.timeline } || {};
                       
                       // Update timeline based on status
                       if (status === "in_progress") {
@@ -229,9 +230,9 @@ const OrdersDashboard = () => {
                         timeline.completed = new Date().toISOString();
                       }
                       
-                      return { ...order, status, timeline };
+                      return { ...ord, status, timeline };
                     }
-                    return order;
+                    return ord;
                   });
                   
                   setOrders(updatedOrders);

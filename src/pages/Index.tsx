@@ -6,18 +6,18 @@ import { useNavigate } from "react-router-dom";
 import { CheckCircle2 } from "lucide-react";
 
 const Index = () => {
-  const { isAuthenticated, redirectBasedOnRole } = useAuth();
+  const { isAuthenticated, currentUser, redirectBasedOnRole } = useAuth();
   const navigate = useNavigate();
 
   // Redirect authenticated users to their appropriate dashboard
   // Redirect unauthenticated users to login page
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && currentUser) {
       redirectBasedOnRole();
-    } else {
+    } else if (!isAuthenticated) {
       navigate("/login");
     }
-  }, [isAuthenticated, redirectBasedOnRole, navigate]);
+  }, [isAuthenticated, currentUser, redirectBasedOnRole, navigate]);
 
   // This content will be shown briefly during redirect
   return (

@@ -5,9 +5,7 @@ import SidebarNav from "./SidebarNav";
 import { useAuth } from "@/context/AuthContext";
 import { Toaster } from "sonner";
 import { AttendanceModal } from "../modals/AttendanceModal";
-import { toast } from "sonner";
-import { SidebarNavProps } from "./SidebarNavProps";
-import { AttendanceModalProps } from "../modals/AttendanceModalProps";
+import { toast as sonnerToast } from "sonner";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -91,16 +89,18 @@ const DashboardLayout = ({
         </main>
       </div>
       <Toaster position="top-right" />
-      <AttendanceModal 
-        isOpen={isAttendanceModalOpen}
-        onClose={closeAttendanceModal}
-        staffMember={currentUser}
-        onAttendanceSubmit={() => {
-          // Handle attendance submission
-          toast.success("Attendance recorded");
-          closeAttendanceModal();
-        }}
-      />
+      {currentUser && (
+        <AttendanceModal 
+          isOpen={isAttendanceModalOpen}
+          onClose={closeAttendanceModal}
+          staffMember={currentUser}
+          onAttendanceSubmit={() => {
+            // Handle attendance submission
+            sonnerToast.success("Attendance recorded");
+            closeAttendanceModal();
+          }}
+        />
+      )}
     </div>
   );
 };

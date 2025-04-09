@@ -24,6 +24,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { SidebarNavProps } from "./SidebarNavProps";
 
 interface NavItem {
   title: string;
@@ -31,9 +32,16 @@ interface NavItem {
   icon: React.ReactNode;
 }
 
-const SidebarNav = () => {
+const SidebarNav = ({ onToggle }: SidebarNavProps) => {
   const { currentUser, logout } = useAuth();
-  const location = useLocation();
+  // Safely access location - wrapped in try-catch to prevent errors outside Router context
+  let location = { pathname: "/" };
+  try {
+    location = useLocation();
+  } catch (error) {
+    console.warn("useLocation hook called outside Router context");
+  }
+  
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -166,7 +174,7 @@ const SidebarNav = () => {
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 lg:px-6">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="lg:hidden">
+              <Button variant="outline" size="icon" className="lg:hidden" onClick={onToggle}>
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
