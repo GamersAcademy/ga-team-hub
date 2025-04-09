@@ -7,30 +7,12 @@ export interface User {
   name: string;
   email: string;
   role: UserRole;
-  department?: string | string[]; // Updated to allow multiple departments
+  department?: string;
   avatar?: string;
 }
 
 // Order types
-export type OrderStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled' | 'awaiting_review' | 'pending_confirmation';
-
-export type TrackStatus = 'in_progress' | 'almost_done' | 'delivered' | 'issue_found' | 'order_id_issue';
-
-export interface TrackingUpdate {
-  id: string;
-  timestamp: string;
-  status: TrackStatus;
-  notes?: string;
-  updatedBy: string;
-  eta?: {
-    hours: number;
-    minutes: number;
-    seconds: number;
-    timestamp: string;
-  };
-  images?: string[];
-  staticData?: Record<string, string>; // For courier, tracking #, etc.
-}
+export type OrderStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled';
 
 export interface Order {
   id: string;
@@ -57,17 +39,11 @@ export interface Order {
     completed?: string;
   };
   expectedCompletionTime?: number; // in minutes
-  trackingUpdates?: TrackingUpdate[];
-  contactInfo?: {
-    phone?: string;
-    whatsapp?: string;
-    email?: string;
-  };
 }
 
 // Staff types
 export interface StaffMember extends User {
-  department: string | string[];
+  department: string;
   position: string;
   shiftStart: string;
   shiftEnd: string;
@@ -132,24 +108,4 @@ export interface ApiIntegration {
   authType: 'api_key' | 'oauth' | 'basic';
   status: 'active' | 'inactive';
   lastSynced?: string;
-}
-
-// Department types
-export interface Department {
-  id: string;
-  name: string;
-  description?: string;
-  createdAt: string;
-  updatedAt?: string;
-}
-
-// Performance types
-export interface PerformanceMetrics {
-  id: string;
-  userId: string;
-  date: string;
-  ordersCompleted: number;
-  totalAllowedTime: number; // in minutes
-  totalActualTime: number; // in minutes
-  overtimeMinutes: number;
 }
