@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import SidebarNav from "./SidebarNav";
 import { useAuth } from "@/context/AuthContext";
 import { Toaster } from "sonner";
-import { AttendanceModal } from "../modals/AttendanceModal";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -74,7 +73,7 @@ const DashboardLayout = ({
         </main>
       </div>
       <Toaster position="top-right" />
-      <AttendanceModal />
+      {/* The AttendanceModal component is imported directly in the App.tsx file, so we don't need to render it here */}
     </div>
   );
 };
