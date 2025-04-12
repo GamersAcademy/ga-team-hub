@@ -1,0 +1,161 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="border-b bg-white py-4">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <div class="flex items-center gap-2">
+                <svg class="h-6 w-6 text-teal-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span class="font-bold text-xl">OrderFlow Team Hub</span>
+            </div>
+            <a href="/login" class="btn">Sign In</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="flex-1 flex items-center py-16">
+        <div class="container mx-auto grid md-grid-cols-2 gap-8 px-4">
+            <div class="space-y-6 flex flex-col justify-center">
+                <h1 class="text-4xl md-text-5xl font-bold leading-tight">
+                    Streamline Your Order Management Workflow
+                </h1>
+                <p class="text-lg text-gray-600">
+                    An all-in-one platform for managing orders, tracking team
+                    performance, and organizing knowledge within your organization.
+                </p>
+                <div class="flex flex-col sm-flex-row gap-4">
+                    <a href="/login" class="btn btn-primary btn-lg">
+                        Get Started
+                    </a>
+                    <a href="#" class="btn btn-outline btn-lg">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="bg-gray-100 rounded-lg p-8 flex items-center justify-center">
+                <div class="w-full max-w-md space-y-6">
+                    <div class="border bg-white rounded-lg p-4 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-medium">Recent Orders</h3>
+                            <span class="text-xs text-gray-500">Today</span>
+                        </div>
+                        <div class="border-b py-2 flex justify-between items-center">
+                            <div>
+                                <div class="font-medium">Order #1001</div>
+                                <div class="text-xs text-gray-500">Customer #2001</div>
+                            </div>
+                            <span class="badge badge-yellow">Pending</span>
+                        </div>
+                        <div class="border-b py-2 flex justify-between items-center">
+                            <div>
+                                <div class="font-medium">Order #1002</div>
+                                <div class="text-xs text-gray-500">Customer #2002</div>
+                            </div>
+                            <span class="badge badge-blue">In Progress</span>
+                        </div>
+                        <div class="py-2 flex justify-between items-center">
+                            <div>
+                                <div class="font-medium">Order #1003</div>
+                                <div class="text-xs text-gray-500">Customer #2003</div>
+                            </div>
+                            <span class="badge badge-green">Completed</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="bg-yellow-50 border border-yellow-100 rounded-lg p-3 text-center">
+                            <div class="text-2xl font-bold text-yellow-900">8</div>
+                            <div class="text-xs text-yellow-700">Pending</div>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 text-center">
+                            <div class="text-2xl font-bold text-blue-900">5</div>
+                            <div class="text-xs text-blue-700">In Progress</div>
+                        </div>
+                        <div class="bg-green-50 border border-green-100 rounded-lg p-3 text-center">
+                            <div class="text-2xl font-bold text-green-900">12</div>
+                            <div class="text-xs text-green-700">Completed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="bg-gray-50 py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">
+                Powerful Features for Your Team
+            </h2>
+            <div class="grid md-grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg border shadow-sm">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Order Management</h3>
+                    <p class="text-gray-600">
+                        Track and manage all incoming orders from the Salla platform with
+                        real-time updates and notifications.
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border shadow-sm">
+                    <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                        <svg class="h-6 w-6 text-purple-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Team Performance</h3>
+                    <p class="text-gray-600">
+                        Monitor staff performance, track attendance, and manage schedules
+                        all in one centralized dashboard.
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-lg border shadow-sm">
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                        <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Knowledge Base</h3>
+                    <p class="text-gray-600">
+                        Create and organize guides, instructions, and resources to help
+                        your team work more efficiently.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-100 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md-flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <svg class="h-6 w-6 text-teal-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span class="font-bold text-xl">OrderFlow Team Hub</span>
+                </div>
+                <div class="text-sm text-gray-400">
+                    © <span id="current-year"></span> OrderFlow Team Hub. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    // Set current year in footer
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+</script>
+{% endblock %}

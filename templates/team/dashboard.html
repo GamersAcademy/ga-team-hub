@@ -1,0 +1,227 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Team Dashboard - OrderFlow Team Hub{% endblock %}
+
+{% block content %}
+<div class="flex h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <svg class="h-6 w-6 text-teal-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <h2>OrderFlow</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/team/tasks/" class="sidebar-link active">
+                <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 11.5A2.5 2.5 0 0 1 11.5 9h1A2.5 2.5 0 0 1 15 11.5v1A2.5 2.5 0 0 1 12.5 15h-1A2.5 2.5 0 0 1 9 12.5v-1z"></path>
+                    <path d="M5.5 8.5A2.5 2.5 0 0 1 8 6h8a2.5 2.5 0 0 1 2.5 2.5v8a2.5 2.5 0 0 1-2.5 2.5H8a2.5 2.5 0 0 1-2.5-2.5v-8z"></path>
+                </svg>
+                <span>My Tasks</span>
+            </a>
+            <a href="/team/knowledge/" class="sidebar-link">
+                <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                <span>Knowledge Base</span>
+            </a>
+            <button class="sidebar-link logout-btn">
+                <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Logout</span>
+            </button>
+        </nav>
+    </div>
+    
+    <!-- Main content -->
+    <div class="flex flex-1 flex-col lg-pl-64">
+        <main class="flex-1 overflow-y-auto p-4 md-p-6 lg-p-8">
+            <h1 class="text-2xl font-bold mb-6">My Tasks</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="stat-card">
+                    <div class="stat-title">Pending Tasks</div>
+                    <div class="stat-value" id="pending-count">0</div>
+                    <div class="stat-desc">Awaiting your action</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">In Progress</div>
+                    <div class="stat-value" id="progress-count">0</div>
+                    <div class="stat-desc">Currently working on</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Completed</div>
+                    <div class="stat-value" id="completed-count">0</div>
+                    <div class="stat-desc">In the last 7 days</div>
+                </div>
+            </div>
+            
+            <div class="card mb-6">
+                <div class="card-header">
+                    <h2 class="card-title">My Tasks</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="table w-full">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Due Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tasks-table-body">
+                            <!-- Tasks will be loaded here -->
+                            <tr>
+                                <td colspan="5" class="text-center py-4">Loading tasks...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fetch tasks when page loads
+        fetchTasks();
+        
+        // Handle logout
+        const logoutBtn = document.querySelector('.logout-btn');
+        logoutBtn.addEventListener('click', async function() {
+            try {
+                const response = await fetch('/api/logout/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    }
+                });
+                
+                if (response.ok) {
+                    window.location.href = '/login/';
+                } else {
+                    alert('Logout failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('An error occurred during logout.');
+            }
+        });
+        
+        // Fetch tasks data
+        async function fetchTasks() {
+            try {
+                const response = await fetch('/api/tasks/', {
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    }
+                });
+                
+                if (response.ok) {
+                    const tasks = await response.json();
+                    renderTasks(tasks);
+                    updateTaskCounts(tasks);
+                } else {
+                    const errorData = await response.json();
+                    alert(`Failed to fetch tasks: ${errorData.error || 'Unknown error'}`);
+                    console.error('Failed to fetch tasks:', errorData);
+                }
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+                document.getElementById('tasks-table-body').innerHTML = 
+                    `<tr><td colspan="5" class="text-center py-4 text-red-500">Error loading tasks. Please try again.</td></tr>`;
+            }
+        }
+        
+        // Render tasks in the table
+        function renderTasks(tasks) {
+            const tableBody = document.getElementById('tasks-table-body');
+            
+            if (tasks.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4">No tasks assigned to you.</td></tr>`;
+                return;
+            }
+            
+            const rows = tasks.map(task => `
+                <tr>
+                    <td>
+                        <div class="font-medium">${task.title}</div>
+                        <div class="text-xs text-gray-500">${task.description.substring(0, 50)}${task.description.length > 50 ? '...' : ''}</div>
+                    </td>
+                    <td>
+                        <span class="badge ${getPriorityBadgeClass(task.priority)}">
+                            ${capitalizeFirst(task.priority)}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge ${getStatusBadgeClass(task.status)}">
+                            ${task.status.replace('_', ' ').split(' ').map(capitalizeFirst).join(' ')}
+                        </span>
+                    </td>
+                    <td>${task.due_date ? formatDate(task.due_date) : 'No due date'}</td>
+                    <td>
+                        <div class="flex gap-2">
+                            <button class="btn btn-sm btn-outline update-status-btn" data-task-id="${task.id}">Update Status</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            
+            tableBody.innerHTML = rows;
+            
+            // Add event listeners to update status buttons
+            document.querySelectorAll('.update-status-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const taskId = this.getAttribute('data-task-id');
+                    // This would typically open a modal or dropdown to update the status
+                    alert(`Update status for task ${taskId} - This would show a modal in a real application`);
+                });
+            });
+        }
+        
+        // Update task count statistics
+        function updateTaskCounts(tasks) {
+            const pendingCount = tasks.filter(task => task.status === 'pending').length;
+            const progressCount = tasks.filter(task => task.status === 'in_progress').length;
+            const completedCount = tasks.filter(task => task.status === 'completed').length;
+            
+            document.getElementById('pending-count').textContent = pendingCount;
+            document.getElementById('progress-count').textContent = progressCount;
+            document.getElementById('completed-count').textContent = completedCount;
+        }
+        
+        // Helper functions
+        function getPriorityBadgeClass(priority) {
+            const priorityClasses = {
+                'low': 'badge-default',
+                'medium': 'badge-info',
+                'high': 'badge-warning',
+                'urgent': 'badge-error'
+            };
+            return priorityClasses[priority] || 'badge-default';
+        }
+        
+        function getStatusBadgeClass(status) {
+            const statusClasses = {
+                'pending': 'badge-warning',
+                'in_progress': 'badge-info',
+                'completed': 'badge-success',
+                'cancelled': 'badge-error'
+            };
+            return statusClasses[status] || 'badge-default';
+        }
+    });
+</script>
+{% endblock %}

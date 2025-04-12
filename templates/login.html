@@ -1,0 +1,220 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Login - OrderFlow Team Hub{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
+    <div class="w-full max-w-md space-y-6">
+        <div class="text-center space-y-2">
+            <div class="flex justify-center">
+                <div class="bg-white p-2 rounded-full shadow-sm">
+                    <svg class="h-8 w-8 text-teal-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <h1 class="text-3xl font-bold">OrderFlow Team Hub</h1>
+            <p class="text-gray-500">
+                Sign in to your account to continue
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Sign In</h2>
+                <p class="card-description">
+                    Enter your email and password to access your account
+                </p>
+            </div>
+            <form id="login-form" class="card-content space-y-4">
+                <div class="space-y-2">
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                        id="email"
+                        type="email"
+                        class="form-input"
+                        placeholder="Your email address"
+                        required
+                    />
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label for="password" class="form-label">Password</label>
+                        <a
+                            href="#"
+                            class="text-sm font-medium text-primary hover-underline"
+                        >
+                            Forgot password?
+                        </a>
+                    </div>
+                    <input
+                        id="password"
+                        type="password"
+                        class="form-input"
+                        placeholder="Your password"
+                        required
+                    />
+                </div>
+                <div class="card-footer">
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-full"
+                        id="login-button"
+                    >
+                        Sign In
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title text-base">Demo Accounts</h3>
+                <p class="card-description">
+                    Click to automatically fill login credentials
+                </p>
+            </div>
+            <div class="card-content">
+                <div class="grid grid-cols-2 gap-2">
+                    <button
+                        class="btn btn-outline text-left h-auto py-2 justify-start"
+                        data-email="ahmed@orderflow.com"
+                        data-password="password"
+                    >
+                        <div>
+                            <div class="font-medium">Admin</div>
+                            <div class="text-xs truncate text-gray-500">
+                                ahmed@orderflow.com
+                            </div>
+                        </div>
+                    </button>
+                    <button
+                        class="btn btn-outline text-left h-auto py-2 justify-start"
+                        data-email="sara@orderflow.com"
+                        data-password="password"
+                    >
+                        <div>
+                            <div class="font-medium">Manager</div>
+                            <div class="text-xs truncate text-gray-500">
+                                sara@orderflow.com
+                            </div>
+                        </div>
+                    </button>
+                    <button
+                        class="btn btn-outline text-left h-auto py-2 justify-start"
+                        data-email="mohammed@orderflow.com"
+                        data-password="password"
+                    >
+                        <div>
+                            <div class="font-medium">Team Member</div>
+                            <div class="text-xs truncate text-gray-500">
+                                mohammed@orderflow.com
+                            </div>
+                        </div>
+                    </button>
+                    <button
+                        class="btn btn-outline text-left h-auto py-2 justify-start"
+                        data-email="omar@orderflow.com"
+                        data-password="password"
+                    >
+                        <div>
+                            <div class="font-medium">Developer</div>
+                            <div class="text-xs truncate text-gray-500">
+                                omar@orderflow.com
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Apply demo account credentials when clicking demo buttons
+        const demoButtons = document.querySelectorAll('[data-email]');
+        demoButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const email = this.getAttribute('data-email');
+                const password = this.getAttribute('data-password');
+                
+                document.getElementById('email').value = email;
+                document.getElementById('password').value = password;
+            });
+        });
+
+        // Handle login form submission
+        const loginForm = document.getElementById('login-form');
+        const loginButton = document.getElementById('login-button');
+        
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Change button to loading state
+            loginButton.disabled = true;
+            loginButton.innerHTML = '<span class="loading"></span> Signing in...';
+            
+            try {
+                const response = await fetch('/api/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Successful login
+                    if (data.role === 'admin' || data.role === 'manager') {
+                        window.location.href = '/admin/dashboard/';
+                    } else if (data.role === 'team') {
+                        window.location.href = '/team/dashboard/';
+                    } else if (data.role === 'developer') {
+                        window.location.href = '/developer/dashboard/';
+                    } else {
+                        // Default redirect
+                        window.location.href = '/';
+                    }
+                } else {
+                    // Login failed
+                    alert(data.error || 'Invalid login credentials');
+                    loginButton.disabled = false;
+                    loginButton.textContent = 'Sign In';
+                }
+            } catch (error) {
+                alert('An error occurred. Please try again.');
+                console.error('Login error:', error);
+                loginButton.disabled = false;
+                loginButton.textContent = 'Sign In';
+            }
+        });
+        
+        // Helper function to get CSRF token from cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+{% endblock %}
